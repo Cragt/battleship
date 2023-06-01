@@ -1,7 +1,8 @@
 // import _ from "lodash";
 
-function ship(length, timesHit, isSunk) {
+function ship(type, length, timesHit, isSunk) {
   return {
+    type: type,
     length: length,
     timesHit: timesHit,
     isSunk: isSunk,
@@ -29,20 +30,32 @@ function createGameBoard() {
     board.push(rowArray);
   }
 
-  function placeShip(row, col) {
+  function placeShip(row, col, ship) {
+    space = 1;
     if (row < 0 || row >= size || col < 0 || col >= size) {
       console.log("Invalid position");
       return;
     }
-
-    board[row][col] = "ship";
+    while (space != ship.length + 1) {
+      board[row][col] = ship.type;
+      row++;
+      space++;
+    }
+    console.log(board);
   }
+  const shipTypes = [
+    "destroyer",
+    "submarine",
+    "cruiser",
+    "battleship",
+    "carrier",
+  ];
 
-  function receiveAttack(row, col) {
-    if (board[row][col] === "ship") {
-      // const ship = board[row][col].ship;
+  function receiveAttack(row, col, ship) {
+    if (shipTypes.includes(board[row][col])) {
       board[row][col] = "hit";
-    } else if (board[row][col] === "miss") {
+      ship.hit();
+    } else if (board[row][col] === "miss" || board[row][col] === "hit") {
       console.log("Invalid position");
       return;
     } else {
@@ -53,6 +66,7 @@ function createGameBoard() {
   function getCellStatus(row, col) {
     return board[row][col];
   }
+
   return {
     placeShip,
     receiveAttack,
@@ -61,15 +75,20 @@ function createGameBoard() {
 }
 
 const gameBoard = createGameBoard();
-console.log(gameBoard);
-gameBoard.placeShip(1, 1);
-gameBoard.receiveAttack(1, 1);
-gameBoard.receiveAttack(1, 2);
-
-let ship1 = ship(4, 2, false);
+let destroyer = ship("destroyer", 2, 0, false);
+let submarine = ship("submarine", 3, 0, false);
+let cruiser = ship("cruiser", 3, 0, false);
+let battleship = ship("battleship", 4, 0, false);
+let carrier = ship("carrier", 5, 0, false);
+gameBoard.placeShip(1, 1, destroyer);
+gameBoard.receiveAttack(1, 1, destroyer);
+console.log(destroyer);
+gameBoard.receiveAttack(2, 1, destroyer);
+console.log(destroyer);
+gameBoard.placeShip(4, 1, carrier);
 console.log(gameBoard.getCellStatus(1, 1));
-console.log(gameBoard.getCellStatus(1, 3));
-console.log(ship1);
-ship1.hit();
-ship1.hit();
-console.log(ship1);
+// gameBoard.receiveAttack(1, 1);
+// console.log(gameBoard.getCellStatus(1, 3));
+// console.log(destroyer);
+// console.log(destroyer);
+// console.log(ship);
