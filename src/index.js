@@ -31,12 +31,16 @@ function createGameBoard() {
   }
 
   function placeShip(row, col, ship) {
-    space = 1;
+    space = 0;
     if (row < 0 || row >= size || col < 0 || col >= size) {
       console.log("Invalid position");
       return;
     }
-    while (space != ship.length + 1) {
+    // Trying to search the whole length of placeable ship to ensure gameboard spaces are empty and ship is placeable
+    // for (let i = space; i < ship.length; i++) {
+    //   console.log(board[row][col]);
+    // }
+    while (space != ship.length) {
       board[row][col] = ship.type;
       row++;
       space++;
@@ -87,8 +91,3 @@ gameBoard.receiveAttack(2, 1, destroyer);
 console.log(destroyer);
 gameBoard.placeShip(4, 1, carrier);
 console.log(gameBoard.getCellStatus(1, 1));
-// gameBoard.receiveAttack(1, 1);
-// console.log(gameBoard.getCellStatus(1, 3));
-// console.log(destroyer);
-// console.log(destroyer);
-// console.log(ship);
