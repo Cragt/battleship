@@ -34,10 +34,24 @@ function createGameBoard() {
     const cellHeight = 64;
 
     const cells = document.createElement("canvas");
+    cells.setAttribute("id", "canvas1");
     cells.width = board[0].length * cellWidth;
     cells.height = board.length * cellHeight;
-    document.body.appendChild(cells);
+    gameArea.appendChild(cells);
     const context = cells.getContext("2d");
+
+    cells.addEventListener("click", handleClick);
+
+    function handleClick(event) {
+      const rect = cells.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      const column = Math.floor(x / cellWidth);
+      const row = Math.floor(y / cellHeight);
+
+      console.log("Clicked on cell:", column, row);
+    }
 
     for (let i = 0; i < board.length; i++) {
       for (let a = 0; a < board[0].length; a++) {
@@ -94,11 +108,24 @@ function createGameBoard() {
     const cellHeight = 64;
 
     const cells = document.createElement("canvas");
+    cells.setAttribute("id", "canvas2");
     cells.width = board[0].length * cellWidth;
     cells.height = board.length * cellHeight;
-    document.body.appendChild(cells);
+    gameArea.appendChild(cells);
     const context = cells.getContext("2d");
 
+    cells.addEventListener("click", handleClick);
+
+    function handleClick(event) {
+      const rect = cells.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      const column = Math.floor(x / cellWidth);
+      const row = Math.floor(y / cellHeight);
+
+      console.log("Clicked on cell:", column, row);
+    }
     for (let i = 0; i < board.length; i++) {
       for (let a = 0; a < board[0].length; a++) {
         if (i % 2 == 0) {
@@ -200,10 +227,15 @@ function createGameBoard() {
 }
 
 function player(name, turn, isComputer) {
+  function placeSelectedShip() {
+    let table = document.getElementById("canvas1");
+  }
+
   return {
     name: name,
     turn: turn,
     isComputer: isComputer,
+    placeSelectedShip,
   };
 }
 const gameBoard = createGameBoard();
@@ -214,15 +246,24 @@ function gameLoop() {
 
   gameArea.appendChild(newGameBtn);
   newGameBtn.addEventListener("click", (event) => {
-    newGameBtn.style.display = 'none';
-    let player1Name = prompt("Enter name for player 1");
+    newGameBtn.style.display = "none";
+    let player1Name = prompt("Player 1 name");
+    let player1Turn = true;
+    let player1IsComputer = false;
     let player2Name = prompt("Enter name for player 2");
+    let player2Turn = false;
+    let player2IsComputer = true;
+    let player1 = player(player1Name, player1Turn, player1IsComputer);
+    let player2 = player(player2Name, player2Turn, player2IsComputer);
+
     gameBoard.player1Board();
     gameBoard.player2Board();
-  })
+    console.log(player1);
+    console.log(player2);
+  });
 }
 gameLoop();
-let player1 = player("Craig", 0, 0);
+// let player1 = player("Craig", 0, 0);
 // console.log(player1);
 let destroyer = ship("destroyer", 2, 0, false);
 let submarine = ship("submarine", 3, 0, false);
